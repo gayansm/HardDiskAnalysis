@@ -37,9 +37,9 @@ Disk.WriteToDisk(fs, buff);
 
 ## Authors
 
-* **Gayan Mudalige** - *Initial work* - (https://gist.github.com/gayansm)
+* **[Gayan Mudalige](https://gist.github.com/gayansm)** - *Initial work*
 
 ## License
 
-This project is licensed under the [MIT License] (https://opensource.org/licenses/MIT) 
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT) 
 
