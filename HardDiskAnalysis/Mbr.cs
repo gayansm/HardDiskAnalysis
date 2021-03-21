@@ -50,44 +50,11 @@ namespace HardDiskAnalysis
 			mbr.Magic = r.ReadUInt16();
 			return mbr;
 		}
-
-		public PartitionEntryLite[] PartTableToPartListLite(uint sectorSize)
-		{
-			var array = new PartitionEntryLite[Partitions.Count];
-			for (int i = 0; i < array.Length; i++)
-			{
-				var x = Partitions[i];
-				var partSize = (ulong)x.NumberOfSectors * sectorSize;
-				array[i] = new PartitionEntryLite(x.Lba, 
-					x.NumberOfSectors,
-					x.Type,
-					ParseStatus(x.Status),
-					partSize);
-			}
-
-			return array;
-		}
-
-		private static Status ParseStatus(byte bytes)
-		{
-			if (bytes == 0x00)
-				return Status.Inactive;
-			if (bytes == 0x80)
-				return Status.Bootable;
-
-			return Status.Invalid;
-		}
-		public enum Status
-		{
-			Invalid = 0,
-			Inactive,
-			Bootable
-		}
 	}
 
 	public class PartitionEntry
 	{
-		public byte Status;
+		public byte PartStatus;
 		public byte StartHead;
 		public byte StartSector; // 6
 		public byte StartTrackMsb; //2
@@ -108,7 +75,7 @@ namespace HardDiskAnalysis
 			using var ms = new MemoryStream(entry);
 			using var r = new BinaryReader(ms);
 			var part = new PartitionEntry();
-			part.Status = r.ReadByte();
+			part.PartStatus = r.ReadByte();
 			part.StartHead = r.ReadByte();
 			var temp = r.ReadByte();
 			part.StartSector = GetBitValue(temp, 0, 6);
@@ -126,9 +93,24 @@ namespace HardDiskAnalysis
 			return part;
 		}
 
+		private static Status ParseStatus(byte bytes)
+		{
+			if (bytes == 0x00)
+				return Status.Inactive;
+			if (bytes == 0x80)
+				return Status.Bootable;
+
+			return Status.Invalid;
+		}
+		public enum Status
+		{
+			Invalid = 0,
+			Inactive,
+			Bootable
+		}
+
 		private static byte GetBitValue(byte comp, int startIndex, int length)
 		{
-			// need to generate value with start to end index set to 1
 			comp = (byte)(comp >> startIndex);
 			var pow = (byte)(Math.Pow(2, length) - 1);
 			var val = (byte)(comp & pow);

@@ -8,16 +8,11 @@ using System.Runtime.InteropServices;
 
 namespace HardDiskAnalysis
 {
-	public static class Disk
+    public static class Disk
 	{
-		private static DiskInfo[] lastDiskInfo;
-
 		public static DiskInfo[] GetDriveInfo()
 		{
 #pragma warning disable CA1416 // Validate platform compatibility
-			if (lastDiskInfo != null)
-				return lastDiskInfo;
-
 			var driveQuery = new ManagementObjectSearcher("select * from Win32_DiskDrive");
 			var diskInfo = new List<DiskInfo>();
 
@@ -79,8 +74,8 @@ namespace HardDiskAnalysis
 
 				currentDisk.PartitionInfo = partList.ToArray();
 			}
-			lastDiskInfo = diskInfo.ToArray();
-			return lastDiskInfo;
+			
+			return diskInfo.ToArray();
 		}
 
 		public static bool Exists(string diskPhysicalId)
@@ -127,7 +122,7 @@ namespace HardDiskAnalysis
 			return handle;
 		}
 
-		public static FileStream InitialiseFileStreamToWriteToDisk(SafeFileHandle handle, uint offset)
+		public static FileStream InitializeFileStreamToWriteToDisk(SafeFileHandle handle, uint offset)
 		{
 			var fs = new FileStream(handle, FileAccess.Read | FileAccess.Write, 4096, true);
 			fs.Seek(offset, SeekOrigin.Begin);

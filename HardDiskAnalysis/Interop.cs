@@ -51,16 +51,7 @@ namespace HardDiskAnalysis
 		public static extern bool CloseHandle(SafeFileHandle safeFileHandle);
 
 		[DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-		public static extern bool ReadFile(SafeFileHandle hFile, [MarshalAs(UnmanagedType.AsAny)][Out] object outBuffer, int nOutBufferSize, out int pBytesReturned, [In] IntPtr overlapped);
-
-		[DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 		unsafe public static extern bool ReadFile(SafeFileHandle hFile, IntPtr outBuffer, int nOutBufferSize, IntPtr pBytesReturned, [In] NativeOverlapped* overlapped);
-
-		[DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-		public static extern bool WriteFile(SafeFileHandle hFile, [MarshalAs(UnmanagedType.AsAny)][In] object inBuffer, int nInBufferSize, out int pBytesReturned, [In] IntPtr overlapped);
-
-		[DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-		unsafe public static extern bool WriteFile(SafeFileHandle hFile, [MarshalAs(UnmanagedType.AsAny)][In] object inBuffer, int nInBufferSize, out int pBytesReturned, [In] NativeOverlapped* overlapped);
 
 		[DllImport("Kernel32.dll", SetLastError = true)]
 		unsafe public static extern bool WriteFile(SafeFileHandle hFile, IntPtr lpBuffer, int nNumberOfBytesToWrite, out int lpNumberOfBytesWritten, [In] ref NativeOverlapped lpOverlapped);
